@@ -1,0 +1,40 @@
+#! /usr/bin/bash
+
+pkgname=cabextract
+pkgver=1.9.1
+pkgrel=1
+pkgdesc="Extractor of Microsoft cabinet files"
+arch=('i686' 'x86_64')
+license=('GPL')
+url="https://www.cabextract.org.uk/"
+makedepends=('libiconv-devel')
+source=(https://www.cabextract.org.uk/cabextract-${pkgver}.tar.gz)
+sha256sums=('afc253673c8ef316b4d5c29cc4aa8445844bee14afffbe092ee9469405851ca7')
+
+
+prepare() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  autoreconf -vfi
+}
+
+build() {
+  mkdir -p build-${pkgname}-${pkgver}-${CHOST}
+  cd build-${pkgname}-${pkgver}-${CHOST}
+  ../${pkgname}-${pkgver}/configure -C \
+    --prefix=/usr
+  make V=0 || make
+}
+
+check() {
+  cd build-${pkgname}-${pkgver}-${CHOST}
+  make check
+}
+
+package() {
+  cd build-${pkgname}-${pkgver}-${CHOST}
+  make DESTDIR=${pkgdir} install
+
+  mkdir -p "${pkgdir}/usr/share/licenses/${pkgname}"
+  cp "${srcdir}/${pkgname}-${pkgver}/COPYING" "${pkgdir}/usr/share/licenses/${pkgname}"
+}

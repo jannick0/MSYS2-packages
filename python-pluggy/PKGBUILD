@@ -3,8 +3,8 @@
 _realname=pluggy
 pkgbase=python-pluggy
 pkgname=(python-${_realname})
-pkgver=1.0.0
-pkgrel=1
+pkgver=1.3.0
+pkgrel=2
 pkgdesc="Plugin and hook calling mechanisms for python"
 arch=('any')
 url="https://github.com/pytest-dev/pluggy"
@@ -17,12 +17,11 @@ makedepends=(
   'python-build'
   'python-installer'
 )
-checkdepends=('python-pytest-runner')
 provides=("python3-${_realname}")
 replaces=("python3-${_realname}")
 conflicts=("python3-${_realname}")
 source=("${pkgbase}-${pkgver}.tar.gz::https://github.com/pytest-dev/pluggy/archive/${pkgver}.tar.gz")
-sha512sums=('88f1180d2607115d6516cba07fa7c1f0e284d1e16fb7ed42c4a05d5d2b0dc1419d2bdbdadc34e2eb7f6b0cc9fc97715c6b184542c01f6bc33242a872c46d7903')
+sha512sums=('42263292ae6a3139c023604bb8b02768215a23e55f3ff900ae929e10438778874bc31bce9d8525689f3f702402a5290da47c314ac3d0cc16b00c01bd5ae458b0')
 
 prepare() {
   # Set version for setuptools_scm

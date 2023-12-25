@@ -1,0 +1,36 @@
+# Maintainer: Christoph Reiter <reiter.christoph@gmail.com>
+
+_pyname=trove-classifiers
+pkgname=python-trove-classifiers
+pkgver=2023.11.29
+pkgrel=1
+pkgdesc="Canonical source for classifiers on PyPI (pypi.org)"
+arch=('any')
+url="https://github.com/pypa/trove-classifiers"
+license=('spdx:Apache-2.0')
+depends=(
+  'python'
+)
+makedepends=(
+  'python-build'
+  'python-installer'
+  'python-setuptools'
+  'python-wheel'
+  'python-calver'
+)
+source=("https://pypi.org/packages/source/${_pyname::1}/${_pyname}/${_pyname}-${pkgver}.tar.gz")
+sha256sums=('ff8f7fd82c7932113b46e7ef6742c70091cc63640c8c65db00d91f2e940b9514')
+
+build() {
+  cd "${_pyname}-${pkgver}"
+
+  python -m build --wheel --no-isolation
+}
+
+package() {
+  cd "${_pyname}-${pkgver}"
+
+  python -m installer --destdir="$pkgdir" dist/*.whl
+  install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

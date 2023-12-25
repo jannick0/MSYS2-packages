@@ -1,0 +1,30 @@
+# Maintainer: Christoph Reiter <reiter.christoph@gmail.com>
+
+_name=pathspec
+pkgname=python-pathspec
+pkgver=0.11.2
+pkgrel=1
+pkgdesc='Utility library for gitignore style pattern matching of file paths'
+arch=('any')
+url=https://github.com/cpburnz/python-pathspec
+license=('spdx: MPL-2.0')
+depends=('python')
+makedepends=(
+  'python-build'
+  'python-flit-core'
+  'python-installer'
+  'python-wheel'
+)
+source=("https://files.pythonhosted.org/packages/source/${_name::1}/$_name/$_name-$pkgver.tar.gz")
+sha256sums=('e0d8d0ac2f12da61956eb2306b69f9469b42f4deb0f3cb6ed47b9cce9996ced3')
+
+build() {
+  cd "$_name-$pkgver"
+  python -m build --wheel --skip-dependency-check --no-isolation
+}
+
+package() {
+  cd "$_name-$pkgver"
+  python -m installer --destdir="$pkgdir" dist/*.whl
+  install -Dm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname"
+}

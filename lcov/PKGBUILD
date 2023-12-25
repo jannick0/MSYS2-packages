@@ -3,6 +3,7 @@
 # Contributor: Simon Sobisch <simonsobisch () gnu () org>
 
 pkgname=lcov
+epoch=1
 pkgver=1.16
 pkgrel=1
 pkgdesc="front-end for GCC's coverage testing tool gcov"

@@ -1,0 +1,43 @@
+# Maintainer: Alexey Pavlov <Alexpux@gmail.com>
+
+pkgname=xorg-util-macros
+pkgver=1.20.0
+pkgrel=1
+pkgdesc='X.Org Autotools macros'
+arch=('any')
+groups=('development')
+license=('custom')
+provides=('util-macros')
+replaces=('util-macros')
+conflicts=('util-macros')
+url="https://xorg.freedesktop.org/"
+depends=()
+makedepends=('autotools')
+source=("https://xorg.freedesktop.org/releases/individual/util/util-macros-${pkgver}.tar.xz")
+sha256sums=('0b86b262dbe971edb4ff233bc370dfad9f241d09f078a3f6d5b7f4b8ea4430db')
+
+prepare() {
+  cd "${srcdir}/util-macros-${pkgver}"
+  autoreconf -fiv
+}
+
+build() {
+  cd "${srcdir}/util-macros-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+check() {
+  cd "${srcdir}/util-macros-${pkgver}"
+  make -k check
+}
+
+package() {
+  cd "${srcdir}/util-macros-${pkgver}"
+  make install DESTDIR="${pkgdir}"
+
+  install -m755 -d "${pkgdir}/usr/lib"
+  mv "${pkgdir}/usr/share/pkgconfig" "${pkgdir}/usr/lib/"
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

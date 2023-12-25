@@ -2,10 +2,10 @@
 
 pkgname=znc
 pkgver=1.8.2
-pkgrel=9
+pkgrel=15
 pkgdesc='An IRC bouncer with modules & scripts support'
 url='https://znc.in/'
-license=('Apache 2.0')
+license=('spdx:Apache-2.0')
 arch=('i686' 'x86_64')
 replaces=('znc-git')
 conflicts=('znc-git')
@@ -28,13 +28,17 @@ optdepends=('tcl: modtcl module'
             'cyrus-sasl: cyrusauth module')
 source=(znc-${pkgver}::git+https://github.com/znc/znc.git#tag=znc-${pkgver}
         #https://github.com/znc/znc/archive/znc-${pkgver}.tar.gz
+        "https://github.com/znc/znc/commit/fecdd9895894b3afe903021b0843a422eb4d3308.patch"
         )
-sha256sums=('SKIP')
+sha256sums=('SKIP'
+            '14957cb7c0ab33166086fdad0744b8ad0c21d5aa8f255e7cf81c6e2407d979e2')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   git submodule update --init --recursive
+
+  patch -Np1 -i "${srcdir}/fecdd9895894b3afe903021b0843a422eb4d3308.patch"
 }
 
 build() {
@@ -56,5 +60,8 @@ build() {
 package() {
   cd "${srcdir}/build-${CARCH}"
   make DESTDIR="${pkgdir}" install
+
+  python3 -m compileall -o 0 -o 1 -s "${pkgdir}" "${pkgdir}/usr/lib/znc"
+
   install -Dm644 ${srcdir}/${pkgname}-${pkgver}/LICENSE ${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE
 }

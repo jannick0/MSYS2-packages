@@ -9,7 +9,6 @@ set -eo pipefail
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # Configure
-source "$DIR/ci-library.sh"
 mkdir artifacts
 git remote add upstream 'https://github.com/MSYS2/MSYS2-packages'
 git fetch --quiet upstream
@@ -18,6 +17,70 @@ sed -i 's/^CheckSpace/#CheckSpace/g' /etc/pacman.conf
 
 pacman --noconfirm -Fy
 
+# Enable colors
+normal=$(tput sgr0)
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+cyan=$(tput setaf 6)
+
+# Basic status function
+_status() {
+    local type="${1}"
+    local status="${package:+${package}: }${2}"
+    local items=("${@:3}")
+    case "${type}" in
+        failure) local -n nameref_color='red';   title='[MSYS2 CI] FAILURE:' ;;
+        success) local -n nameref_color='green'; title='[MSYS2 CI] SUCCESS:' ;;
+        message) local -n nameref_color='cyan';  title='[MSYS2 CI]'
+    esac
+    printf "\n${nameref_color}${title}${normal} ${status}\n\n"
+    printf "${items:+\t%s\n}" "${items:+${items[@]}}"
+}
+
+# Run command with status
+execute(){
+    local status="${1}"
+    local command="${2}"
+    local arguments=("${@:3}")
+    cd "${package:-.}"
+    message "${status}"
+    if [[ "${command}" != *:* ]]
+        then ${command} ${arguments[@]}
+        else ${command%%:*} | ${command#*:} ${arguments[@]}
+    fi || failure "${status} failed"
+    cd - > /dev/null
+}
+
+# Get changed packages in correct build order
+list_packages() {
+    # readarray doesn't work with a plain pipe
+    readarray -t packages < <("$DIR/ci-get-build-order.py")
+}
+
+install_packages() {
+    pacman --noprogressbar --upgrade --noconfirm *.pkg.tar.*
+}
+
+# List DLL dependencies
+list_dll_deps(){
+    local target="${1}"
+    echo "$(tput setaf 2)MSYS2 DLL dependencies:$(tput sgr0)"
+    find "$target" -regex ".*\.\(exe\|dll\)" -exec "echo '{}:' && ldd '{}';" | GREP_COLOR="1;35" grep --color=always "msys-.*\|" \
+    || echo "        None"
+}
+
+list_dll_bases(){
+    local target="${1}"
+    echo "$(tput setaf 2)MSYS2 DLL bases:$(tput sgr0)"
+    find "$target" -regex ".*\.\(exe\|dll\)" -print | rebase -iT - | GREP_COLOR="1;35" grep --color=always "msys-.*\|" \
+    || echo "        None"
+}
+
+# Status functions
+failure() { local status="${1}"; local items=("${@:2}"); _status failure "${status}." "${items[@]}"; exit 1; }
+success() { local status="${1}"; local items=("${@:2}"); _status success "${status}." "${items[@]}"; exit 0; }
+message() { local status="${1}"; local items=("${@:2}"); _status message "${status}"  "${items[@]}"; }
+
 # Detect
 list_packages || failure 'Could not detect changed files'
 message 'Processing changes'
@@ -25,7 +88,6 @@ test -z "${packages}" && success 'No changes in package recipes'
 
 # Build
 message 'Building packages' "${packages[@]}"
-execute 'Approving recipe quality' check_recipe_quality
 
 message 'Adding an empty local repository'
 repo-add $PWD/artifacts/ci.db.tar.gz
@@ -73,7 +135,7 @@ for package in "${packages[@]}"; do
 
         echo "::group::[uninstall] ${pkgname}"
         message "Uninstalling $pkgname"
-        pacman -R --recursive --unneeded --noconfirm --noprogressbar "$pkgname"
+        grep -qFx "${package}" "$DIR/ci-dont-install-list.txt" || pacman -R --recursive --unneeded --noconfirm --noprogressbar "$pkgname"
         echo "::endgroup::"
     done
     cd - > /dev/null

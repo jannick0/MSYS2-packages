@@ -2,19 +2,20 @@
 # Maintainer:  Simon Legner <Simon.Legner@gmail.com>
 # Maintainer:  Chris Molozian (novabyte) <chris DOT molozian AT gmail DOT com>
 # Maintainer:  Maximilian Salomon <msal.coding@gmail.com>
+# Maintainer:  Piotr Fusik <piotr AT fusion-lang DOT org>
 # Contributor: Sanjuro Makabe (itti) <vuck AT gmx DOT de>
 # Contributor: Simón Oroño <simonorono AT protonmail DOT com>
 # Contributor: Eon Jeong <administrator@korea.ac.kr>
 
 pkgname=('gradle' 'gradle-doc')
-pkgver=7.6
+pkgver=8.5
 pkgrel=1
 arch=('any')
 url='https://www.gradle.org/'
 license=('APACHE')
 source=("https://services.gradle.org/distributions/gradle-${pkgver}-all.zip"
         "gradle.sh")
-sha256sums=('312eb12875e1747e05c2f81a4789902d7e4ec5defbd1eefeaccc08acf096505d'
+sha256sums=('c16d517b50dd28b3f5838f0e844b7520b8f1eb610f2f29de7e4e04a1b7c9c79b'
             '0d6699a246bc86c40fb2da3fe73f8e3b228201a8781194d8b303e239d2fa758e')
 
 package_gradle(){
@@ -26,11 +27,13 @@ package_gradle(){
 
   # create the necessary directory structure
   mkdir -p "${pkgdir}/usr/share/java/${pkgname}/bin"
+  mkdir -p "${pkgdir}/usr/share/java/${pkgname}/lib/agents"
   mkdir -p "${pkgdir}/usr/share/java/${pkgname}/lib/plugins"
   mkdir -p "${pkgdir}/usr/bin"
 
   # copy across jar files
   install -Dm644 lib/*.jar "${pkgdir}/usr/share/java/${pkgname}/lib" || return 1
+  install -Dm644 lib/agents/*.jar "${pkgdir}/usr/share/java/${pkgname}/lib/agents" || return 1
   install -Dm644 lib/plugins/*.jar "${pkgdir}/usr/share/java/${pkgname}/lib/plugins" || return 1
 
   # copy across supporting text documentation and scripts
@@ -41,14 +44,13 @@ package_gradle(){
 }
 
 package_gradle-doc() {
-  pkgdesc="A powerful build system for the JVM (documentation and samples)"
+  pkgdesc="A powerful build system for the JVM (documentation)"
   options=('!strip')
   optdepends=("gradle")
   cd "${srcdir}/gradle-${pkgver}"
 
   # create the necessary directory structure
   mkdir -p "${pkgdir}/usr/share/java/gradle/docs/"
-  mkdir -p "${pkgdir}/usr/share/java/gradle/samples/"
 
   # copy across documentation
   cp --recursive docs/* "${pkgdir}/usr/share/java/gradle/docs/"

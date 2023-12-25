@@ -1,16 +1,16 @@
 # Maintainer: poxu <poxvuibr@gmail.com>
 
 pkgname=pv
-pkgver=1.6.20
+pkgver=1.8.5
 pkgrel=1
 pkgdesc="Pipe viewer"
 arch=('i686' 'x86_64')
 url="https://www.ivarch.com/programs/pv.shtml"
 license=('Artistic License 2.0')
-depends=()
-makedepends=('autotools' 'gcc')
+depends=('libintl')
+makedepends=('autotools' 'gcc' 'gettext-devel')
 source=(https://www.ivarch.com/programs/sources/pv-${pkgver}.tar.gz)
-sha256sums=('b5f1ee79a370c5287e092b6e8f1084f026521fe0aecf25c44b9460b870319a9e')
+sha256sums=('d22948d06be06a5be37336318de540a2215be10ab0163f8cd23a20149647b780')
 
 build () {
   [ -d ${srcdir}/build-${CHOST} ] && rm -rf ${srcdir}/build-${CHOST}

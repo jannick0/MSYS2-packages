@@ -2,21 +2,20 @@
 
 pkgbase=curl
 pkgname=('curl' 'libcurl' 'libcurl-devel')
-pkgver=7.87.0
-pkgrel=2
+pkgver=8.5.0
+pkgrel=1
 pkgdesc="Multi-protocol file transfer utility"
 arch=('i686' 'x86_64')
 url="https://curl.haxx.se"
 license=('spdx:MIT')
 depends=('ca-certificates')
-makedepends=('brotli-devel' 'heimdal-devel' 'libcrypt-devel' 'libidn2-devel' 'autotools'
-             'libunistring-devel' 'libnghttp2-devel' 'libpsl-devel' 'libssh2-devel' 'openssl-devel' 'zlib-devel' 'libzstd-devel' 'gcc') #  'libcares-devel'
-options=('!libtool' 'strip' '!debug')
+makedepends=('brotli-devel' 'heimdal-devel' 'libidn2-devel' 'autotools'
+             'libunistring-devel' 'libnghttp2-devel' 'libpsl-devel' 'libssh2-devel' 'openssl-devel' 'zlib-devel' 'libzstd-devel' 'gcc')
 source=("https://github.com/curl/curl/releases/download/${pkgbase}-${pkgver//./_}/${pkgbase}-${pkgver}.tar.xz"{,.asc}
         curl-7.58.0-libpsl-static-libs.patch
         curl-7.60.0-gssapi-static-libs.patch
         0001-more-static-fixes.patch)
-sha256sums=('ee5f1a1955b0ed413435ef79db28b834ea5f0fb7c8cfb1ce47175cc3bee08fff'
+sha256sums=('42ab8db9e20d8290a3b633e7fbb3cec15db34df65fd1015ef8ac1e4723750eeb'
             'SKIP'
             'ad3d76013c2dd683c44ad4cdc5108ea5218056c87b66f6ed2a90502e785a39af'
             '2821fcb7238432992e7d99b327b40f08f7fa9823a86c13fa0203975aa3d25359'
@@ -67,21 +66,20 @@ build() {
 }
 
 package_curl() {
-  depends=('ca-certificates' 'libcurl' 'libcrypt'
+  depends=('ca-certificates' 'libcurl'
            'libunistring' 'libnghttp2' 'libpsl' 'openssl' 'zlib')
 
   mkdir -p ${pkgdir}/usr/bin
   cp -f ${srcdir}/dest/usr/bin/*.exe ${pkgdir}/usr/bin/
   cp -rf ${srcdir}/dest/usr/share ${pkgdir}/usr/
 
-  # license
   install -Dm644 ${srcdir}/${pkgname}-${pkgver}/COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
 }
 
 package_libcurl() {
   pkgdesc="Multi-protocol file transfer library (runtime)"
-  depends=('brotli' 'ca-certificates' 'heimdal-libs' 'libcrypt' 'libidn2'
-          'libunistring' 'libnghttp2' 'libpsl' 'libssh2' 'openssl' 'zlib' 'libzstd') #'libcares'
+  depends=('brotli' 'ca-certificates' 'heimdal-libs' 'libidn2'
+          'libunistring' 'libnghttp2' 'libpsl' 'libssh2' 'openssl' 'zlib' 'libzstd')
   groups=('libraries')
 
   mkdir -p ${pkgdir}/usr/bin
@@ -90,8 +88,8 @@ package_libcurl() {
 
 package_libcurl-devel() {
   pkgdesc="Libcurl headers and libraries"
-  depends=("libcurl=${pkgver}" 'brotli-devel' 'heimdal-devel' 'libcrypt-devel' 'libidn2-devel'
-           'libunistring-devel' 'libnghttp2-devel' 'libpsl-devel' 'libssh2-devel' 'openssl-devel' 'zlib-devel') #'libcares-devel'
+  depends=("libcurl=${pkgver}" 'brotli-devel' 'heimdal-devel' 'libidn2-devel'
+           'libunistring-devel' 'libnghttp2-devel' 'libpsl-devel' 'libssh2-devel' 'openssl-devel' 'zlib-devel')
   options=('staticlibs')
   groups=('development')
 

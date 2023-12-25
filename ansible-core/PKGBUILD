@@ -1,0 +1,51 @@
+# Maintainer: Alexandre Ferreira <contact@alexjorgef.com>
+
+pkgname=ansible-core
+pkgver=2.16.2
+pkgrel=1
+pkgdesc='Radically simple IT automation platform'
+arch=('any')
+url='https://pypi.org/project/ansible-core'
+license=('spdx:GPL-3.0-or-later')
+depends=('python' 'python-yaml' 'python-jinja' 'python-packaging')
+provides=('python-ansible' 'ansible-base')
+optdepends=(
+	'sshpass: for ssh connections with password'
+)
+makedepends=('tar' 'python-build' 'python-installer' 'python-setuptools' 'python-wheel')
+replaces=('ansible-base')
+backup=('etc/ansible/ansible.cfg')
+source=("https://pypi.python.org/packages/source/a/ansible-core/ansible-core-${pkgver}.tar.gz"
+        "0001-ctypes-cdll-loadlibrary-msys2.patch")
+sha512sums=('6e2389fc6b34645c0f1566eca960da36616619a5ed5e35b46f3d659979fe519db20d89b4f598344a389f4b6ac33bb660ea91a1a6509002bbf4ac791ea3cb4cbd'
+            'f129850ecf75b48dd89b2f43e7f09a2585d63959be807299f5c1ddcdb12ecafafa4a230dc0d8a9c284d5d6fec21eae22eb4c0c8c5fde37a09d7bdac7b8503b98')
+noextract=("${pkgname}-${pkgver}.tar.gz")
+
+apply_patch_with_msg() {
+  for _fname in "$@"
+  do
+    msg2 "Applying ${_fname}"
+    patch -Nbp1 -i "${srcdir}"/${_fname}
+  done
+}
+
+prepare() {
+  tar zxf "${srcdir}/${pkgname}-${pkgver}.tar.gz" || tar zxf "${srcdir}/${pkgname}-${pkgver}.tar.gz"
+
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  # Patches
+  apply_patch_with_msg \
+    0001-ctypes-cdll-loadlibrary-msys2.patch
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  python -m build --wheel --skip-dependency-check --no-isolation
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  python -m installer --destdir="${pkgdir}" dist/*.whl
+  install -Dm644 COPYING "${pkgdir}"/usr/share/doc/${pkgname}/COPYING
+}

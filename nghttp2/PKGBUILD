@@ -1,8 +1,8 @@
 # Maintainer: J. Peter Mugaas <jpmugaas@suddenlink.net>
 
-pkgbase=libnghttp2
-pkgname=("nghttp2" "${pkgbase}" "${pkgbase}-devel")
-pkgver=1.51.0
+pkgbase=nghttp2
+pkgname=("nghttp2" "libnghttp2" "libnghttp2-devel")
+pkgver=1.58.0
 pkgrel=1
 pkgdesc='Framing layer of HTTP/2 is implemented as a reusable C library'
 arch=(i686 x86_64)
@@ -14,9 +14,9 @@ depends=("jansson"
          "libcares"
          "gcc-libs")
 makedepends=('jansson-devel' 'libevent-devel' 'openssl-devel' 'libcares-devel' 'zlib-devel' 'autotools' 'gcc' 'make')
-license=(MIT)
+license=('spdx:MIT')
 source=(https://github.com/nghttp2/nghttp2/releases/download/v$pkgver/nghttp2-${pkgver}.tar.xz)
-sha256sums=('66aa76d97c143f42295405a31413e5e7d157968dad9f957bb4b015b598882e6b')
+sha256sums=('4a68a3040da92fd9872c056d0f6b0cd60de8410de10b578f8ade9ecc14d297e0')
 
 prepare() {
   cd nghttp2-${pkgver}

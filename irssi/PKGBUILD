@@ -5,7 +5,7 @@
 pkgname=irssi
 replaces=(irssi-git)
 conflicts=(irssi-git)
-pkgver=1.4.3
+pkgver=1.4.5
 pkgrel=2
 pkgdesc="Modular text mode IRC client with Perl scripting"
 arch=('i686' 'x86_64')
@@ -16,7 +16,7 @@ makedepends=('gettext-devel' 'glib2-devel' 'openssl-devel' 'perl-devel' 'ncurses
 optdepends=('perl-libwww: for the scriptassist script')
 backup=('etc/irssi.conf')
 source=("https://github.com/irssi/${pkgname}/releases/download/${pkgver}/${pkgname}-${pkgver}.tar.xz"{,.asc})
-sha256sums=('b93f715223a322e67f42b61a08a512ae29e34bd4a53d7f223766660aaa5a0434'
+sha256sums=('72a951cb0ad622785a8962801f005a3a412736c7e7e3ce152f176287c52fe062'
             'SKIP')
 validpgpkeys=('7EE65E3082A5FB06AC7C368D00CCB587DDBEF0E1') # The Irssi project <staff@irssi.org>
 

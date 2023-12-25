@@ -1,40 +1,38 @@
 
 _realname=reflex
 pkgname=${_realname}
-pkgver=20210510
-pkgrel=2
+pkgver=20230523
+pkgrel=1
 pkgdesc="A variant of the flex fast lexical scanner"
 arch=('i686' 'x86_64')
 url="https://invisible-island.net/reflex"
 license=('BSD')
 makedepends=('autotools' 'gcc')
 
-# source=("${_realname}-${pkgver}.tar.gz::https://invisible-island.net/datafiles/release/${_realname}.tar.gz")
 source=("${_realname}-${pkgver}.tar.gz::https://github.com/ThomasDickey/${_realname}-snapshots/archive/t${pkgver}.tar.gz")
-sha256sums=('12b4f1b7b4d69bd43a8c976c5807fd1aeb2495ac4497c02d63f443c02d0eb900')
-
-
-_src_dir=${_realname}-snapshots-t${pkgver}
-_build_dir=build-${pkgver}-${MSYSTEM_CHOST}
+sha256sums=('48462f9fb66efb0445d9a8119d821b6a1209da83a346e5275575b24f069c4640')
 
 
 prepare() {
-  autoreconf -vfi ${_src_dir}
+  pushd "${_realname}-snapshots-t${pkgver}"
+  autoreconf -vfi
+  popd
 }
 
 build() {
-  mkdir -p ${_build_dir}
-  cd ${_build_dir}
-  ../${_src_dir}/configure -C
+  mkdir -p build-${pkgver}-${MSYSTEM_CHOST}
+  pushd build-${pkgver}-${MSYSTEM_CHOST}
+  ../${_realname}-snapshots-t${pkgver}/configure -C
   make
+  popd
 }
 
 check() {
-  make -C ${_build_dir} check
+  make -C build-${pkgver}-${MSYSTEM_CHOST} bigcheck
 }
 
 package() {
-  mkdir -p "${pkgdir}/usr/share/licenses/${pkgname}"
-  cp -pv ${_src_dir}/package/debian/copyright "${pkgdir}/usr/share/licenses/${pkgname}"
-  make -C ${_build_dir} DESTDIR=${pkgdir} install
+  make -C build-${pkgver}-${MSYSTEM_CHOST} DESTDIR=${pkgdir} install
+  install -Dv -t "${pkgdir}/usr/share/licenses/${pkgname}" \
+    "${_realname}-snapshots-t${pkgver}/package/debian/copyright"
 }

@@ -2,19 +2,18 @@
 
 _realname=ExtUtils-MakeMaker
 pkgname=perl-${_realname}
-pkgver=7.62
-pkgrel=1
+pkgver=7.68
+pkgrel=2
 pkgdesc="ExtUtils::MakeMaker - Create a module Makefile"
 arch=('any')
 license=('GPL' 'PerlArtistic')
 url="https://metacpan.org/release/ExtUtils-MakeMaker"
 depends=('perl')
-makedepends=('libcrypt-devel')
 groups=('perl-modules')
 options=('!emptydirs')
 source=(https://www.cpan.org/authors/id/B/BI/BINGOS/${_realname}-${pkgver}.tar.gz
         001-msysize.patch)
-sha256sums=('5022ad857fd76bd3f6b16af099fe2324639d9932e08f21e891fb313d9cae1705'
+sha256sums=('270238d253343b833daa005fb57a3a5d8916b59da197698a632b141e7acad779'
             '2e460d107c65b3fe4abce518327d59bfb70adcca8ae27404f5b0f68359af30a3')
 
 prepare() {

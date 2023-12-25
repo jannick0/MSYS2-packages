@@ -1,15 +1,15 @@
 pkgbase=libssh
 pkgname=('libssh' 'libssh-devel')
-pkgver=0.10.4
-pkgrel=2
+pkgver=0.10.6
+pkgrel=1
 pkgdesc='Library for accessing ssh client services through C libraries'
 url='https://www.libssh.org/'
 license=('spdx:LGPL-2.1+')
 arch=('i686' 'x86_64')
 depends=('zlib' 'libopenssl')
-makedepends=('cmake' 'python' 'openssl-devel' 'gcc')
+makedepends=('cmake' 'python' 'openssl-devel' 'gcc' 'zlib-devel')
 source=("https://www.libssh.org/files/${pkgver%.*}/$pkgname-$pkgver.tar.xz"{,.asc})
-sha256sums=('07392c54ab61476288d1c1f0a7c557b50211797ad00c34c3af2bbc4dbc4bd97d'
+sha256sums=('1861d498f5b6f1741b6abc73e608478491edcf9c9d4b6630eef6e74596de9dc1'
             'SKIP')
 validpgpkeys=('8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D') # Andreas Schneider <asn@cryptomilk.org>
 

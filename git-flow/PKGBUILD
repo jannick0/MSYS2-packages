@@ -3,7 +3,7 @@
 _realname=git-flow
 pkgname="${_realname}"
 pkgver=1.12.3
-pkgrel=1
+pkgrel=2
 pkgdesc="Git extensions to provide high-level repository operations for Vincent Driessen's branching model (AVH edition)"
 arch=('i686' 'x86_64')
 license=('BSD')
@@ -11,6 +11,9 @@ depends=('git' 'util-linux' 'make')
 url="https://github.com/petervanderdoes/gitflow-avh"
 source=("${_realname}"::"git+https://github.com/petervanderdoes/gitflow-avh.git#branch=master")
 sha256sums=('SKIP')
+msys2_references=(
+  'aur: gitflow-avh'
+)
 
 pkgver() {
   cd "${srcdir}/${_realname}"

@@ -27,13 +27,15 @@ jobs:
 
       - name: Configure Pagefile
         if: ${{ matrix.msystem != 'CLANGARM64' }}
+        # https://github.com/al-cheb/configure-pagefile-action/issues/16
+        continue-on-error: true
         uses: al-cheb/configure-pagefile-action@86589fd789a4de3e62ba628dda2cb10027b66d67
         with:
           minimum-size: 4GB
           maximum-size: 16GB
           disk-root: "C:"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: temp
           fetch-depth: 0
@@ -42,13 +44,13 @@ jobs:
       # to match the autobuild environment
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
           architecture: 'x64'
 
       - uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.msystem }}
-          install: git python base-devel pactoys
+          install: git python base-devel
           update: true
 
       - name: Add staging repo

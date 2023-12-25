@@ -2,19 +2,19 @@
 
 _realname=Net-DNS
 pkgname=perl-${_realname}
-pkgver=1.33
+pkgver=1.40
 pkgrel=1
 pkgdesc="Perl Module: Interface to the DNS resolver."
 arch=('i686' 'x86_64')
 license=('PerlArtistic')
-url="https://metacpan.org/${_realname}/"
+url="https://metacpan.org/dist/Net-DNS"
 groups=('perl-modules')
 depends=('perl-Digest-HMAC' 'perl-Net-IP' 'perl')
 makedepends=('make' 'gcc')
 checkdepends=('perl-Test-Pod')
 options=('!emptydirs')
 source=("https://www.cpan.org/authors/id/N/NL/NLNETLABS/${_realname}-${pkgver}.tar.gz")
-sha256sums=('5a40e7cf524e4bd2c33cf03b82b47d5308b712083aa5ee180b0b5af54c71fbd2')
+sha256sums=('209bbd40de8d48c1bd7aade48da237fe0a499f89d279baa2e1a99bd5ec922ddc')
 
 prepare() {
   cd "${srcdir}/${_realname}-${pkgver}"

@@ -1,6 +1,6 @@
 pkgname=fish
-pkgver=3.5.1
-pkgrel=2
+pkgver=3.6.4
+pkgrel=1
 epoch=
 pkgdesc='Smart and user friendly shell intended mostly for interactive use'
 arch=('i686' 'x86_64')
@@ -17,15 +17,18 @@ source=("https://github.com/fish-shell/fish-shell/releases/download/${pkgver}/${
         msys2.fish
         msystem.fish
         perlbin.fish)
-        
-sha512sums=('328e3d972f9e7cffe161515540f00a97c5cbe11b43ec293090bedb96a6a8e689e07ceafecb3efcd0e378edea59811adb0acc011d5885ac28d98838387c678235'
+sha512sums=('0ab777d8ee87c9039a5d2abb71f175025a05c5aa0a0813d87f875e9975038a395cceebeedb5a8909d43ba06825ec1d15500fcdc9d784c424ce1dc86272703780'
             'SKIP'
             '817195e2a6cdec1791b96666ee95f87f76569048268645a947f9283f711906fd3f2f5f1a4908b2b1edc0b9742215e0ac1c1cdaf10f9ec50d38b115fc05ae44b7'
             '81d0a0b436a5a9dd2973e0de932833605c9f3fc57cc71ba32a15856e29b5192fa8ab450bb17d6f53636c8724327901a2d8ecd72fecb4afe120c258dcc581129d'
             '64777bf41ba576506d45ffe4a5d7b5c47a026f519678f71ef1b08a7fad3d678faac23f3a695cea2869743bbbea85a26c97c11df5de6eb91c65304d5e43671201'
             'a675062ebaf7da53845ba3a005d9f4b90c514c7eea2ead0f16592246925a00862afe7fd7326a86006f8d6077e02c3c37a87358105d4bb661001161bfd1788724')
-
 validpgpkeys=('003837986104878835FA516D7A67D962D88A709A') # David Adam <zanchey@gmail.com>
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"

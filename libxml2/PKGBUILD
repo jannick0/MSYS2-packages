@@ -2,22 +2,20 @@
 
 pkgbase=libxml2
 pkgname=('libxml2' 'libxml2-devel' 'libxml2-python')
-pkgver=2.10.3
-pkgrel=2
+pkgver=2.12.3
+pkgrel=1
 pkgdesc="XML parsing library, version 2"
 arch=(i686 x86_64)
 license=('spdx:MIT')
-makedepends=('gcc' 'python-devel' 'libcrypt-devel' 'libreadline-devel'
+makedepends=('gcc' 'python-devel' 'libreadline-devel'
              'liblzma-devel' 'zlib-devel' 'autotools')
 url="https://gitlab.gnome.org/GNOME/libxml2/-/wikis/"
 source=("https://download.gnome.org/sources/libxml2/${pkgver%.*}/${pkgbase}-${pkgver}.tar.xz"
         https://www.w3.org/XML/Test/xmlts20130923.tar.gz
-        libxml2-2.9.8-python3-unicode-errors.patch
-        libxml2-2.9.1-msys2.patch)
-sha256sums=('5d2cc3d78bec3dbe212a9d7fa629ada25a7da928af432c93060ff5c17ee28a9c'
+        libxml2-2.9.8-python3-unicode-errors.patch)
+sha256sums=('8c8f1092340a89ff32bc44ad5c9693aff9bc8a7a3e161bb239666e5d15ac9aaa'
             '9b61db9f5dbffa545f4b8d78422167083a8568c59bd1129f94138f936cf6fc1f'
-            '37eb81a8ec6929eed1514e891bff2dd05b450bcf0c712153880c485b7366c17c'
-            '8a464e7c2bacb2336e88ce6b830549b49455bed3b4c8252942b9d7c387a7c430')
+            '0f5d465503b24271e11752262af89c58eb0b26b4901c3b021bd843e6e5d4e95a')
 
 # Helper macros to help make tasks easier #
 apply_patch_with_msg() {
@@ -50,9 +48,6 @@ prepare() {
   apply_patch_with_msg \
     libxml2-2.9.8-python3-unicode-errors.patch
 
-  apply_patch_with_msg \
-    libxml2-2.9.1-msys2.patch
-
   autoreconf -vfi
 }
 
@@ -75,6 +70,7 @@ build() {
     --without-icu \
     --enable-shared \
     --enable-static \
+    --with-legacy \
     --with-python=/usr/bin/python
   make
   make DESTDIR=${srcdir}/dest install

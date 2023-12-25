@@ -2,8 +2,8 @@
 # Maintainer: Norbert Pfeiler <norbert.pfeiler+aur ät gmail.com>
 
 pkgname=txt2tags
-pkgver=3.7
-pkgrel=6
+pkgver=3.9
+pkgrel=1
 pkgdesc='A text formatting and conversion tool.'
 arch=('any')
 url='https://www.txt2tags.org/'
@@ -16,7 +16,7 @@ makedepends=(
   "python-installer"
 )
 source=(https://pypi.python.org/packages/source/t/txt2tags/txt2tags-${pkgver}.tar.gz)
-sha256sums=('27969387206d12b4e4a0eb13d0d5dd957d71dbb932451b0dceeab5e3dbb6178a')
+sha256sums=('7e4244db6a63aaa58fc17fa4cdec62b6fb89cc41d3a00ba4edaffa37f27d6746')
 
 build() {
   cd "${pkgname}-${pkgver}"

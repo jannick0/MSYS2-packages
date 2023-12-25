@@ -1,4 +1,4 @@
-From be313d22648907a88dcc8986f2fde56e3ca3e76e Mon Sep 17 00:00:00 2001
+From 7616b8a2e0ffcf068b47e1a66bbb1dbd7d9b5c50 Mon Sep 17 00:00:00 2001
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
 Date: Wed, 31 Mar 2021 11:38:41 +0200
 Subject: [PATCH 22/N] Do not show Error dialogs by default
@@ -51,7 +51,7 @@ index 1541fa4..f243aad 100644
  bool NO_COPY in_forkee;
  
 diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index 4d93c13..e0770ae 100644
+index c77970b..383f5e5 100644
 --- a/winsup/cygwin/spawn.cc
 +++ b/winsup/cygwin/spawn.cc
 @@ -429,7 +429,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,

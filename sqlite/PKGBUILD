@@ -88,6 +88,7 @@ build() {
     -DSQLITE_ENABLE_STMTVTAB=1 \
     -DSQLITE_HAVE_ZLIB=1 \
     -DSQLITE_ENABLE_MATH_FUNCTIONS=1 \
+    -DSQLITE_STRICT_SUBTYPE=1 \
 "
 
   export lt_cv_deplibs_check_method='pass_all'
@@ -102,7 +103,8 @@ build() {
     --enable-shared \
     --enable-static \
     --enable-readline --disable-editline \
-    --enable-all
+    --enable-all \
+    config_BUILD_EXEEXT='.exe'
 
   make -j all ${_sqlite_tools}
 
@@ -112,6 +114,9 @@ build() {
   msg2 "Building lemon.exe..."
   cd "${srcdir}"
   make lemon
+
+  msg2 "Run quicktest"
+  make quicktest -C "${srcdir}/build-${_srcver}-${MSYSTEM_CHOST}" || true
 }
 
 check() {

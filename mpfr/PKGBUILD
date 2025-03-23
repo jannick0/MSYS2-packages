@@ -1,7 +1,7 @@
 # Maintainer: Alexey Pavlov <Alexpux@gmail.com>
 
 pkgname=('mpfr' 'mpfr-devel')
-_pkgver=4.2.1
+_pkgver=4.2.2
 pkgver=${_pkgver}
 # pkgver=${_pkgver}.p1
 pkgrel=1
@@ -15,16 +15,12 @@ license=('spdx:LGPL-3.0-or-later')
 depends=('gmp>=5.0')
 makedepends=('gmp-devel>=5.0' 'autotools' 'gcc' 'autoconf-archive')
 source=(https://www.mpfr.org/mpfr-current/mpfr-${_pkgver}.tar.xz{,.asc})
-        # patches.patch)
-# wget https://www.mpfr.org/mpfr-4.2.1/allpatches -O patches.patch
 validpgpkeys=('A534BE3F83E241D918280AEB5831D11A0D4DB02A') # Vincent Lefevre <vincent@vinc17.net>
-sha256sums=('277807353a6726978996945af13e52829e3abd7a9a5b7fb2793894e18f1fcbb2'
+sha256sums=('b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01'
             'SKIP')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${_pkgver}"
-
-  # patch -p1 -i ${srcdir}/patches.patch
 
   autoreconf -fi
 }
@@ -46,6 +42,12 @@ check() {
   make check
 }
 
+_install_license() {
+  mkdir -p "${pkgdir}/usr/share/licenses/${pkgname}/"
+  cp -vf "${srcdir}/dest/usr/share/doc/mpfr/COPYING"{,.LESSER} \
+      "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
+
 package_mpfr() {
   groups=('libraries')
 
@@ -53,6 +55,10 @@ package_mpfr() {
 
   cp -rf ${srcdir}/dest/usr/bin ${pkgdir}/usr/
   cp -rf ${srcdir}/dest/usr/share ${pkgdir}/usr/
+
+  rm -f "${pkgdir}"mpfr/usr/share/doc/mpfr/COPYING{,.LESSER}
+
+  _install_license
 }
 
 package_mpfr-devel() {
@@ -64,4 +70,6 @@ package_mpfr-devel() {
   mkdir -p ${pkgdir}/usr
   cp -rf ${srcdir}/dest/usr/include ${pkgdir}/usr/
   cp -rf ${srcdir}/dest/usr/lib ${pkgdir}/usr/
+
+  _install_license
 }
